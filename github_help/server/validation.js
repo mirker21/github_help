@@ -1,17 +1,4 @@
-import { body, check, validationResult } from 'express-validator';
-
-// const validate = (req, res, next) => {
-//     const errors = validationResult(req);
-//     console.log(errors)
-//     if (errors.isEmpty()) {
-//         return next();
-//     }
-//     const extractedErrors = []
-//     errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }))
-//     return res.status(422).json({
-//         errors: extractedErrors
-//     })
-// }
+import { check, validationResult } from 'express-validator';
 
 function checkRegister() {
     return [
@@ -38,7 +25,6 @@ function checkRegister() {
         .notEmpty()
         .custom((password, {req}) => {
             if (password !== req.body.confirm_password) {
-                // throw error if passwords do not match
                 throw new Error("Passwords don't match");
             } else {
                 return password;
@@ -65,6 +51,10 @@ function checkLogin() {
         // .escape()
         // .notEmpty()
         // .isEmail(),
+        
+        // I will get email up and running
+        // as soon as I know that username
+        // login and session works properly.
 
         check('password')
         .trim()
@@ -75,20 +65,6 @@ function checkLogin() {
 }
 
 export {
-    // validate,
     checkRegister,
     checkLogin,
 }
-
-        // check('password')
-        // .notEmpty()
-        // .trim()
-        // .escape()
-        // .custom((password, {req}) => {
-        //     if (password !== req.body.confirmPassword) {
-        //         // throw error if passwords do not match
-        //         throw new Error("Passwords don't match");
-        //     } else {
-        //         return password;
-        //     }
-        // })
