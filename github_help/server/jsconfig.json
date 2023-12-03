@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false
+    // "baseUrl": "_app",
+    // "paths": {
+    //   "@/components/*": ["_components/*"],
+    //   "@lib/*": ["lib/*"],
+    //   "@/public/*": ["public/*"],
+    //   "@/*": ["./*"],
+    // }
+  }
+}
