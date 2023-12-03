@@ -13,8 +13,8 @@ import { validationResult } from 'express-validator';
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true })); // for application/x-www-form-urlencoded (forms)
-app.use(express.json()); // for application/json (postman requests)
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json());
 app.use(cors(
     { 
         origin: true, 
@@ -24,7 +24,7 @@ app.use(cors(
         allowedHeaders: ["Access-Control-Allow-Headers"],
         optionsSuccessStatus: 200
     }
-)); // allows cross-site origin resource sharing, between next.js frontend and express.js backend
+));
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -52,12 +52,7 @@ const clientP = mongoose.connect(
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    // resave means for every request to the server, 
-    // we will create a new session even 
-    // though it's the same user and browser.
     saveUninitialized: false,
-    // if we have not modified the session,
-    // we do not want it to save.
     rolling: true, 
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI,
@@ -78,12 +73,6 @@ app.use(session({
         maxAge: 14 * 24 * 60 * 60,
     },
 }));
-
-// app.use((req, res, next) => {
-//     if(!req.session._id || !req.session.isAuth)
-//       res.clearCookie('', {path: '/'});
-//     next();
-// });
 
 const isAuth = (req, res, next) => {
     console.log(req.session);
@@ -119,7 +108,6 @@ app.post('/register', checkRegister(), async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        // create hashed password with a salt using bcrypt
 
         await User.create(
             {
@@ -188,6 +176,9 @@ app.post("/login", checkLogin(), async (req, res) => {
             req.session['isAuth'] = true;
             req.session['userId'] = user[0]._id;
 
+            // tried this below, but it only saved
+            // the cookie in the browser, not the db.
+            
             // res.cookie("_id", user[0]._id, {
             //     sameSite: 'none',
             //     secure: true, 
